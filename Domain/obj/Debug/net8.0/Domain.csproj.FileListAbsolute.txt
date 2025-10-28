@@ -1,0 +1,11 @@
+D:\dotnet\projects\GUNSHOP_finalproj\Domain\bin\Debug\net8.0\Domain.deps.json
+D:\dotnet\projects\GUNSHOP_finalproj\Domain\bin\Debug\net8.0\Domain.dll
+D:\dotnet\projects\GUNSHOP_finalproj\Domain\bin\Debug\net8.0\Domain.pdb
+D:\dotnet\projects\GUNSHOP_finalproj\Domain\obj\Debug\net8.0\Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\dotnet\projects\GUNSHOP_finalproj\Domain\obj\Debug\net8.0\Domain.AssemblyInfoInputs.cache
+D:\dotnet\projects\GUNSHOP_finalproj\Domain\obj\Debug\net8.0\Domain.AssemblyInfo.cs
+D:\dotnet\projects\GUNSHOP_finalproj\Domain\obj\Debug\net8.0\Domain.csproj.CoreCompileInputs.cache
+D:\dotnet\projects\GUNSHOP_finalproj\Domain\obj\Debug\net8.0\Domain.dll
+D:\dotnet\projects\GUNSHOP_finalproj\Domain\obj\Debug\net8.0\refint\Domain.dll
+D:\dotnet\projects\GUNSHOP_finalproj\Domain\obj\Debug\net8.0\Domain.pdb
+D:\dotnet\projects\GUNSHOP_finalproj\Domain\obj\Debug\net8.0\ref\Domain.dll
