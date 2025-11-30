@@ -13,24 +13,43 @@ public class Order
     public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; private set; }
 
+    private Order(
+        Guid id,
+        string orderNumber,
+        Guid customerId,
+        Guid weaponId,
+        DateTime orderDate,
+        OrderStatus status,
+        decimal totalAmount,
+        DateTime createdAt)
+    {
+        Id = id;
+        OrderNumber = orderNumber;
+        CustomerId = customerId;
+        WeaponId = weaponId;
+        OrderDate = orderDate;
+        Status = status;
+        TotalAmount = totalAmount;
+        CreatedAt = createdAt;
+    }
+
     public static Order New(
-        string orderNumber, 
-        Guid customerId, 
-        Guid weaponId, 
-        decimal totalAmount, 
+        string orderNumber,
+        Guid customerId,
+        Guid weaponId,
+        decimal totalAmount,
         DateTime orderDate)
     {
-        return new Order
-        {
-            Id = Guid.NewGuid(),
-            OrderNumber = orderNumber,
-            CustomerId = customerId,
-            WeaponId = weaponId,
-            OrderDate = orderDate,
-            Status = OrderStatus.Pending,
-            TotalAmount = totalAmount,
-            CreatedAt = DateTime.UtcNow
-        };
+        return new Order(
+            Guid.NewGuid(),
+            orderNumber,
+            customerId,
+            weaponId,
+            orderDate,
+            OrderStatus.Pending,
+            totalAmount,
+            DateTime.UtcNow
+        );
     }
 
     public void UpdateStatus(OrderStatus newStatus, string? notes = null)
@@ -55,4 +74,5 @@ public class Order
         Status = OrderStatus.Cancelled;
         UpdatedAt = DateTime.UtcNow;
     }
+    
 }

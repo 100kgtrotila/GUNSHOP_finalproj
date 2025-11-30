@@ -18,9 +18,9 @@ public class CustomerController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(CustomerResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Create([FromBody] CreateCustomerRequest request)
+    public async Task<ActionResult> Create([FromBody] CreateCustomerRequest request, CancellationToken cancellationToken)
     {
         var command = new CreateCustomerCommand
         {
@@ -30,22 +30,33 @@ public class CustomerController : ControllerBase
             PhoneNumber = request.PhoneNumber,
             LicenseNumber = request.LicenseNumber
         };
+    
+        var customer = await _mediator.Send(command, cancellationToken);
 
-        var customer = await _mediator.Send(command);
-
+        var response = new CustomerResponse(
+            customer.Id,
+            customer.FirstName,
+            customer.LastName,
+            customer.Email,
+            customer.PhoneNumber,
+            customer.LicenseNumber,
+            customer.IsVerified,
+            customer.CreatedAt,
+            customer.UpdatedAt
+        );
+    
         return CreatedAtAction(
             nameof(GetById),
             new { id = customer.Id },
-            new { id = customer.Id }
+            response 
         );
     }
 
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<CustomerResponse>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAll()
+    public async Task<ActionResult> GetAll(CancellationToken cancellationToken)
     {
-        var customers = await _mediator.Send(new GetAllCustomersQuery());
-
+        var customers = await _mediator.Send(new GetAllCustomersQuery(), cancellationToken);
         var response = customers.Select(c => new CustomerResponse(
             c.Id,
             c.FirstName,
@@ -57,17 +68,15 @@ public class CustomerController : ControllerBase
             c.CreatedAt,
             c.UpdatedAt
         ));
-
         return Ok(response);
     }
 
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(CustomerResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetById(Guid id)
+    public async Task<ActionResult> GetById(Guid id, CancellationToken cancellationToken)
     {
-        var customer = await _mediator.Send(new GetCustomerByIdQuery(id));
-
+        var customer = await _mediator.Send(new GetCustomerByIdQuery(id), cancellationToken);
         if (customer == null)
         {
             return NotFound();
@@ -84,14 +93,13 @@ public class CustomerController : ControllerBase
             customer.CreatedAt,
             customer.UpdatedAt
         );
-
         return Ok(response);
     }
 
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateCustomerRequest request)
+    public async Task<ActionResult> Update(Guid id, [FromBody] UpdateCustomerRequest request, CancellationToken cancellationToken)
     {
         var command = new UpdateCustomerCommand
         {
@@ -102,16 +110,26 @@ public class CustomerController : ControllerBase
             PhoneNumber = request.PhoneNumber
         };
 
-        await _mediator.Send(command);
+        await _mediator.Send(command, cancellationToken);
         return NoContent();
     }
+    
+    [HttpDelete("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> Delete(Guid id, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new DeleteCustomerCommand(id), cancellationToken);
+        return NoContent();
+    }
+
 
     [HttpPost("{id:guid}/verify")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Verify(Guid id)
+    public async Task<ActionResult> Verify(Guid id, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new VerifyCustomerCommand(id));
+        await _mediator.Send(new VerifyCustomerCommand(id), cancellationToken);
         return NoContent();
     }
 }

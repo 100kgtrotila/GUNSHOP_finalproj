@@ -13,29 +13,55 @@ public class Weapon
     public WeaponCategory Category { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; private set; }
+    
+    private readonly List<ProductComment.ProductComment> _comments = new();
+    public IReadOnlyCollection<ProductComment.ProductComment> Comments => _comments.AsReadOnly();
+
+    private Weapon(
+        Guid id,
+        string name,
+        string manufacturer,
+        string model,
+        string caliber,
+        string serialNumber,
+        decimal price,
+        WeaponStatus status,
+        WeaponCategory category,
+        DateTime createdAt)
+    {
+        Id = id;
+        Name = name;
+        Manufacturer = manufacturer;
+        Model = model;
+        Caliber = caliber;
+        SerialNumber = serialNumber;
+        Price = price;
+        Status = status;
+        Category = category;
+        CreatedAt = createdAt;
+    }
 
     public static Weapon New(
-        string name, 
-        string manufacturer, 
-        string model, 
-        string caliber, 
-        string serialNumber, 
-        decimal price, 
+        string name,
+        string manufacturer,
+        string model,
+        string caliber,
+        string serialNumber,
+        decimal price,
         WeaponCategory category)
     {
-        return new Weapon
-        {
-            Id = Guid.NewGuid(),
-            Name = name,
-            Manufacturer = manufacturer,
-            Model = model,
-            Caliber = caliber,
-            SerialNumber = serialNumber,
-            Price = price,
-            Status = WeaponStatus.InStock,
-            Category = category,
-            CreatedAt = DateTime.UtcNow
-        };
+        return new Weapon(
+            Guid.NewGuid(),
+            name,
+            manufacturer,
+            model,
+            caliber,
+            serialNumber,
+            price,
+            WeaponStatus.InStock,
+            category,
+            DateTime.UtcNow
+        );
     }
 
     public void UpdateDetails(string name, string manufacturer, string model, string caliber, decimal price)

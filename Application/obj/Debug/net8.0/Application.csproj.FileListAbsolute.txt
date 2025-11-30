@@ -13,3 +13,4 @@ D:\dotnet\projects\GUNSHOP_finalproj\Application\obj\Debug\net8.0\Application.dl
 D:\dotnet\projects\GUNSHOP_finalproj\Application\obj\Debug\net8.0\refint\Application.dll
 D:\dotnet\projects\GUNSHOP_finalproj\Application\obj\Debug\net8.0\Application.pdb
 D:\dotnet\projects\GUNSHOP_finalproj\Application\obj\Debug\net8.0\ref\Application.dll
+D:\dotnet\projects\GUNSHOP_finalproj\Application\obj\Debug\net8.0\Application.sourcelink.json

@@ -12,24 +12,43 @@ public class Customer
     public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; private set; }
 
+    private Customer(
+        Guid id,
+        string firstName,
+        string lastName,
+        string email,
+        string phoneNumber,
+        string licenseNumber,
+        bool isVerified,
+        DateTime createdAt)
+    {
+        Id = id;
+        FirstName = firstName;
+        LastName = lastName;
+        Email = email;
+        PhoneNumber = phoneNumber;
+        LicenseNumber = licenseNumber;
+        IsVerified = isVerified;
+        CreatedAt = createdAt;
+    }
+
     public static Customer New(
-        string firstName, 
-        string lastName, 
-        string email, 
-        string phoneNumber, 
+        string firstName,
+        string lastName,
+        string email,
+        string phoneNumber,
         string licenseNumber)
     {
-        return new Customer
-        {
-            Id = Guid.NewGuid(),
-            FirstName = firstName,
-            LastName = lastName,
-            Email = email,
-            PhoneNumber = phoneNumber,
-            LicenseNumber = licenseNumber,
-            IsVerified = false,
-            CreatedAt = DateTime.UtcNow
-        };
+        return new Customer(
+            Guid.NewGuid(),
+            firstName,
+            lastName,
+            email,
+            phoneNumber,
+            licenseNumber,
+            false,
+            DateTime.UtcNow
+        );
     }
 
     public void UpdateDetails(string firstName, string lastName, string email, string phoneNumber)

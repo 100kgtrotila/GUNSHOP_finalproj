@@ -9,3 +9,4 @@ D:\dotnet\projects\GUNSHOP_finalproj\Domain\obj\Debug\net8.0\Domain.dll
 D:\dotnet\projects\GUNSHOP_finalproj\Domain\obj\Debug\net8.0\refint\Domain.dll
 D:\dotnet\projects\GUNSHOP_finalproj\Domain\obj\Debug\net8.0\Domain.pdb
 D:\dotnet\projects\GUNSHOP_finalproj\Domain\obj\Debug\net8.0\ref\Domain.dll
+D:\dotnet\projects\GUNSHOP_finalproj\Domain\obj\Debug\net8.0\Domain.sourcelink.json

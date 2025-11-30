@@ -173,3 +173,4 @@ D:\dotnet\projects\GUNSHOP_finalproj\Api\obj\Debug\net8.0\refint\Api.dll
 D:\dotnet\projects\GUNSHOP_finalproj\Api\obj\Debug\net8.0\Api.pdb
 D:\dotnet\projects\GUNSHOP_finalproj\Api\obj\Debug\net8.0\Api.genruntimeconfig.cache
 D:\dotnet\projects\GUNSHOP_finalproj\Api\obj\Debug\net8.0\ref\Api.dll
+D:\dotnet\projects\GUNSHOP_finalproj\Api\obj\Debug\net8.0\Api.sourcelink.json

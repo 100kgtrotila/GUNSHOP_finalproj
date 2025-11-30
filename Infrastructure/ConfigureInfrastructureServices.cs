@@ -1,12 +1,14 @@
-using Application.Weapons.Interfaces;
+using Application.Comments.Interfaces;
+using Application.Comments.Queries; // <-- Додано
 using Application.Customers.Interfaces;
 using Application.Customers.Queries;
 using Application.Orders.Interfaces;
 using Application.Orders.Queries;
+using Application.Weapons.Interfaces;
 using Application.Weapons.Queries;
 using Infrastructure.Persistence;
-using Infrastructure.Persistence.Repositories;
-using Infrastructure.Persistence.Queries;
+using Infrastructure.Persistence.Queries;    // <-- Додано
+using Infrastructure.Persistence.Repositories; // <-- Додано
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,14 +30,18 @@ public static class ConfigureInfrastructureServices
             options.UseSnakeCaseNamingConvention();
         });
 
+        // Існуюча реєстрація
+        services.AddScoped<ICustomerRepository, CustomerRepository>();
+        services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IWeaponRepository, WeaponRepository>();
+
+        services.AddScoped<ICustomerQueries, CustomerQueries>();
+        services.AddScoped<IOrderQueries, OrderQueries>();
         services.AddScoped<IWeaponQueries, WeaponQueries>();
 
-        services.AddScoped<ICustomerRepository, CustomerRepository>();
-        services.AddScoped<ICustomerQueries, CustomerQueries>();
-
-        services.AddScoped<IOrderRepository, OrderRepository>();
-        services.AddScoped<IOrderQueries, OrderQueries>();
+        // V V V РЕЄСТРАЦІЯ НОВИХ СЕРВІСІВ V V V
+        services.AddScoped<IProductCommentRepository, ProductCommentRepository>();
+        services.AddScoped<IProductCommentQueries, ProductCommentQueries>();
 
         return services;
     }

@@ -18,9 +18,9 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(OrderResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Create([FromBody] CreateOrderRequest request)
+    public async Task<ActionResult> Create([FromBody] CreateOrderRequest request, CancellationToken cancellationToken)
     {
         var command = new CreateOrderCommand
         {
@@ -30,22 +30,34 @@ public class OrderController : ControllerBase
             TotalAmount = request.TotalAmount,
             OrderDate = request.OrderDate
         };
+    
+        var order = await _mediator.Send(command, cancellationToken);
 
-        var order = await _mediator.Send(command);
-
+        var response = new OrderResponse(
+            order.Id,
+            order.OrderNumber,
+            order.CustomerId,
+            order.WeaponId,
+            order.OrderDate,
+            order.Status,
+            order.TotalAmount,
+            order.Notes,
+            order.CreatedAt,
+            order.UpdatedAt
+        );
+    
         return CreatedAtAction(
             nameof(GetById),
             new { id = order.Id },
-            new { id = order.Id }
+            response 
         );
     }
 
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<OrderResponse>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
-        var orders = await _mediator.Send(new GetAllOrdersQuery());
-
+        var orders = await _mediator.Send(new GetAllOrdersQuery(), cancellationToken);
         var response = orders.Select(o => new OrderResponse(
             o.Id,
             o.OrderNumber,
@@ -58,17 +70,15 @@ public class OrderController : ControllerBase
             o.CreatedAt,
             o.UpdatedAt
         ));
-
         return Ok(response);
     }
 
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(OrderResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetById(Guid id)
+    public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken) 
     {
-        var order = await _mediator.Send(new GetOrderByIdQuery(id));
-
+        var order = await _mediator.Send(new GetOrderByIdQuery(id), cancellationToken); 
         if (order == null)
         {
             return NotFound();
@@ -86,14 +96,13 @@ public class OrderController : ControllerBase
             order.CreatedAt,
             order.UpdatedAt
         );
-
         return Ok(response);
     }
 
     [HttpPatch("{id:guid}/status")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] UpdateOrderStatusRequest request)
+    public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] UpdateOrderStatusRequest request, CancellationToken cancellationToken) 
     {
         var command = new UpdateOrderStatusCommand
         {
@@ -101,23 +110,31 @@ public class OrderController : ControllerBase
             NewStatus = request.Status,
             Notes = request.Notes
         };
-
-        await _mediator.Send(command);
+        await _mediator.Send(command, cancellationToken);  
         return NoContent();
     }
 
     [HttpPost("{id:guid}/complete")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Complete(Guid id, [FromBody] CompleteOrderRequest request)
+    public async Task<IActionResult> Complete(Guid id, [FromBody] CompleteOrderRequest request, CancellationToken cancellationToken) 
     {
         var command = new CompleteOrderCommand
         {
             Id = id,
             CompletionNotes = request.CompletionNotes
         };
-
-        await _mediator.Send(command);
+        await _mediator.Send(command, cancellationToken); 
         return NoContent();
     }
+    
+    [HttpDelete("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> Delete(Guid id, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new DeleteOrderCommand(id), cancellationToken);
+        return NoContent();
+    }
+
 }
